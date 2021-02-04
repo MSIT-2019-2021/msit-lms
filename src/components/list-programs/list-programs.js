@@ -20,10 +20,11 @@ class ListPrograms extends Component{
                             {this.props.description}
                         </div>
                     </div>
+                    <div>
+                        <button type="button" class="btn btn-primary" className="button1">{this.props.button}</button>
+                    </div>
                 </div>
-                <div>
-                    <button type="button" class="btn btn-primary" className="button1">{this.props.button}</button>
-                </div>
+                
                 </div>    
             </div>
         )
