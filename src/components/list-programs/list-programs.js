@@ -13,7 +13,7 @@ class ListPrograms extends Component{
                 </h2>
                 <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                     <div className="row">
-                        <div className="col-sm-2">
+                        <div className="col-sm-1">
                             <img src="{this.props.image}" />
                         </div>
                         <div className="accordion-body" className="col-sm-10">
