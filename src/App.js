@@ -1,12 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
 import Routes from './Routes'
+import ListPrograms from './components/list-programs/list-programs'
 function App() {
   return (
-    <div className="App">
-    <Routes/>
-  </div>
-  
+    <ListPrograms></ListPrograms>
   );
 }
 export default App;
