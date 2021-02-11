@@ -1,9 +1,9 @@
-import logo from './logo.svg';
 import './App.css';
 import Routes from './Routes';
 import Cards from './components/Cards';
 
 function App() {
+
   return (
     <div className="App">
     <Routes/>

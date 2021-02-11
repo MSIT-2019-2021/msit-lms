@@ -1,48 +1,50 @@
 import React, { Component } from "react";
 import {Link} from "react-router-dom";
 import './NavBar.css'
-var userName=""
+
 class NavBar extends Component {
  
   render() {
-    userName=this.props.userName
+    var userName=this.props.userName
    
-    if(userName!==''){
+    if(userName!==undefined || userName!=null )
       var userNav=  
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                {/* <ul class="navbar-nav mr-auto mb-lg-0">
+                {/* <ul className ="navbar-nav mr-auto mb-lg-0">
                   
                 </ul> */}
                 
-                <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <Link class="nav-link" to='#'>Credits</Link>
+                <ul className ="nav navbar-nav ml-auto">
+                    <li className ="nav-item">
+                        <Link className ="nav-link" to='#'>Credits</Link>
                     </li>
-                    <li class="nav-item">
-                        <Link  class="nav-link " to="#">Course status</Link>
+                    <li className ="nav-item">
+                        <Link  className ="nav-link " to="#">Course status</Link>
                     </li>
-                    <li class="nav-item">
-                      <span class="nav-link active">{'Hi! '+userName}</span>
+                    <li className ="nav-item">
+                      <span className ="nav-link active">{'Hi! '+userName}</span>
                   </li>
-                  <li class="nav-item">
-                    <Link class="nav-link " to="#">Logout</Link>
+                  <li className ="nav-item">
+                    <Link className ="nav-link " to="#">Logout</Link>
                   </li>
                 </ul>
               
           </div>
       
-    }
+    
     return (
+      <div className='navFix'>
       <nav className="navbar fixed-top navbar-expand-md navbar-colour navbar-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">LMS</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      <div className ="container-fluid">
+        <Link className ="navbar-brand" href="#">LMS</Link>
+        <button className ="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+          <span className ="navbar-toggler-icon"></span>
         </button>
         {userNav}
       </div>
     </nav>
+    </div>
   );
   }
 }
