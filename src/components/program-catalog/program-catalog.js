@@ -84,8 +84,10 @@ class ProgramCatalog extends Component {
   }
 
   setList(List){
+    var view = this.props.location.state.view;
     List = List.map(program => {
-      return <ListPrograms key={program['programID']['_id']} view={this.props.location.state.view} title={program['programID']['programName']} description={program['programID']['programDescription']} image={program['programID']['programImage']} button="Enter"></ListPrograms>
+      var [ID,Title,Desc,Img] = this.getData(view,program);
+      return <ListPrograms id={ID} key={ID} view={view} title={Title} description={Desc} image={Img} button="Enter"></ListPrograms>
     });
 
     return List;
