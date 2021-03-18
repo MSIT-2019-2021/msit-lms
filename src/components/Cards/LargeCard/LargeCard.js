@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import {Link,withRouter} from "react-router-dom";
 import './LargeCard.css'
 
+var content = null
 class LargeCard extends Component {
 
   constructor(props){
@@ -20,13 +21,19 @@ class LargeCard extends Component {
         pathname: '/courses-catalog',
           state: { view: 'courses',layout:layoutStyle}
         })
-      }
-      else{
+      }else if(this.props.view ==='modules'){
+
+      }else{
 
       }
   }
 
   render() {
+
+    if(this.props.view === "modules"){
+      // return();
+    }
+
     return (
     <div class="card mb-3">
   <div class="row">
