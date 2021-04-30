@@ -2,35 +2,22 @@ import React, { Component } from "react";
 import NavBar from "../NavBar/NavBar";
 import { withRouter } from "react-router-dom";
 import ReactDOM from 'react-dom';
-import Quiz from './Quiz/Quiz';
 import SideBar from "./sideBar";
 import dompurify from "dompurify";
 import "./moduleCatalog.css";
+import sideBar from "./sideBar";
 
 var dropDownItems = "";
-var descType = "";
-var content = "";
 let courseInstanceId,
   programId,
-  courseId,
-  activityId,
-  questionId,
-  moduleId,
-  maxMarks,
-  activityType;
+  courseId;
+let activeId="";
+var mcontent = "";
 class moduleCatalog extends Component {
-  constructor(props) {
+
+  constructor(props){
     super(props);
-    this.state = {
-      desc: "",
-      list: null,
-      loading: true,
-      submitLink: "",
-    };
-    this.setModuleDesc = this.setModuleDesc.bind(this);
-    this.setSubModuleDesciption = this.setSubModuleDesciption.bind(this);
-    this.state.submission = this.submission.bind(this);
-    this.submitNow = this.submitNow.bind(this);
+    this.state = {active:"",list: [],loading: true};
   }
 
   componentDidMount() {
@@ -59,138 +46,136 @@ class moduleCatalog extends Component {
       .catch((error) => console.log("error", error));
   }
 
+  getactive(active,name,module) {
+    activeId = name;
+    console.log('active =',active,"activeId =",activeId);
+    if (activeId === "") {
+      this.setState({ active: name });
+      this.setModuleDesc(module);
+      return "moduleButton active";
+    }
+    if (active === activeId) {
+      return "moduleButton active";
+    }
+    return "moduleButton";
+  }
+
+  setModuleDesc(mod) {
+    mod = JSON.parse(mod);
+    // this.setState({ desc: mod["desc"] });
+    mcontent = (
+      <div className="container">
+      <div
+      className='contentarea'
+      dangerouslySetInnerHTML={{
+        __html: dompurify.sanitize(mod['desc']),
+      }}
+    />
+    </div>);
+    // ReactDOM.render(content,document.getElementById('content'));
+    // return content
+  }
+
+  setSubModule(moduleId, contents) {
+    let ModuleItem = (props) => {
+      return (
+        <li className='sidebar_li'>
+          <button
+            className={this.getactive(props.activity,props.id,props.content)}
+            onClick={() => {
+              activeId = props.activity;
+              this.setSubModuleDesciption(moduleId, props.content);
+            }}>
+            {props.activity}
+          </button>
+        </li>
+      );
+    };
+    let moduleToDisplay = contents?.map((content) => {
+      return (
+        <ModuleItem
+          content={JSON.stringify(content)}
+          id={content.activity_id}
+          key={content.activity_id}
+          activity={content.activity_name}></ModuleItem>
+      );
+    });
+    return moduleToDisplay;
+  }
+
+  setSubModuleDesciption(moduleId,contents){
+    mcontent = (<sideBar mid={moduleId} pid={programId} cin={courseInstanceId} cid={courseId}>{contents}</sideBar>);
+    this.setState({loading:false})
+  }
+
+  setmodules(sid,id,name,key,module,moduleContent) {
+    // let sid = this.props.sid;
+    let colapse = "colapse-" + sid;
+    let head = "head-" + sid;
+    return (
+      <div className='accordion-item'>
+        <h2 className='accordion-header' id={head}>
+          <button
+            className={
+              sid === 1 ? "accordion-button" : "accordion-button collapsed"
+            }
+            type='button'
+            data-bs-toggle='collapse'
+            data-bs-target={`#${colapse}`}
+            aria-expanded='false'
+            aria-controls={colapse}>
+            {sid}. {name}
+          </button>
+        </h2>
+        <div
+          id={colapse}
+          className={
+            sid === 1
+              ? "accordion-collapse collapse show"
+              : "accordion-collapse collapse"
+          }
+          aria-labelledby={head}
+          data-bs-parent='#accordionExample'>
+          <div className='accordion-body' id='flow1'>
+            <div>
+              <li className='sidebar_li'>
+                <button
+                  key={key}
+                  className={this.getactive(name)}
+                  onClick={() => {
+                    activeId = name;
+                    this.setState({ active: name });
+                    this.setModuleDesc(JSON.stringify(module));
+                  }}>
+                  {"OverView"}
+                </button>
+              </li>
+              {this.setSubModule(id,moduleContent)}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   SetSideBar(list) {
     var sid = 0;
     dropDownItems = list.map((module) => {
       ++sid;
-      return (
-        <SideBar
-          id={module["module_id"]}
-          key={module["module_id"]}
-          name={module["name"]}
-          module={module}
-          moduleContent={module.content}
-          subModuledesc={this.setSubModuleDesciption}
-          desc={this.setModuleDesc}
-          sid={sid}></SideBar>
-      );
+      let mod = this.setmodules(sid,module["module_id"],module["name"],module["module_id"],module,module.content);
+      return mod;
+      // return (
+      //   <SideBar
+      //     id={module["module_id"]}
+      //     key={module["module_id"]}
+      //     name={module["name"]}
+      //     module={module}
+      //     moduleContent={module.content}
+      //     subModuledesc={this.setSubModuleDesciption}
+      //     desc={this.setModuleDesc}
+      //     sid={sid}></SideBar>
+      // );
     });
-  }
-
-  setSubModuleDesciption(Id, descript) {
-
-    moduleId = Id;
-    ReactDOM.render("",document.getElementById('content'));
-    descript = JSON.parse(descript);
-    // console.log(descript);
-    var description = descript["activity_json"];
-    console.log(description);
-    console.log(`switch assignment condition ${(description[0]['activityType']=== "assignment")}`);
-    if(description[0]['activityType']==="quiz"){
-      description = JSON.stringify(description);
-      content = (<Quiz mid={moduleId}>{description}</Quiz>);
-      ReactDOM.render(content,document.getElementById('content'));
-    }else if(description[0]['activityType']==="assignment"){
-      console.log('in assignment case');
-        activityId = descript["activity_id"];
-        var html = "<div>";
-        description.forEach((desc) => {
-          console.log(desc);
-          html = "<h1>" + html + desc["title"] + "</h1><br></br>";
-          if (desc["text"] !== undefined) {
-            html = html + desc["text"];
-            descType = "";
-          } else if (desc["questions"] ?? [0] === "undefined") {
-            descType = desc["questions"][0]["questionType"];
-            questionId = desc["questions"][0]["question_id"];
-            activityType = desc["activityType"];
-            console.log("qsId", questionId);
-            maxMarks = desc["questions"][0]["max_marks"];
-            html =
-              html +
-              desc["questions"][0]["questionText"][0]["text"] +
-              "</a><br><br>" +
-              "Max marks: " +
-              desc["questions"][0]["max_marks"];
-          }
-        });
-        html = html + "</div>";
-        content = (
-          <div className="container">
-          <div
-          className='contentarea'
-          dangerouslySetInnerHTML={{
-            __html: dompurify.sanitize(html),
-          }}
-        />
-        <div>{this.submission()}</div>
-        </div>);
-        ReactDOM.render(content,document.getElementById('content'));
-    }
-
-  }
-
-  submission() {
-    // console.log("DESC", descType);
-    if (descType === "filesubmission") {
-      let submitLink = (
-        <div className='submission'>
-          <form>
-            <input
-              id="submit"
-              className='submitBox'
-              type='text'
-              name='submitLink'
-              placeholder='paste your submission link here'
-            />
-            <button id='link-submit' type='button' onClick={this.submitNow}>
-              submit
-            </button>
-          </form>
-        </div>
-      );
-      descType = "";
-      return submitLink;
-    } else return "";
-  }
-  submitNow() {
-    console.log(" submission link =",document.getElementById('submit').value);
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    var raw = JSON.stringify({
-      programId: programId,
-      courseInstanceId: courseInstanceId,
-      courseId: courseId,
-      moduleId: moduleId,
-      activityType: activityType,
-      activityId: activityId,
-      questionId: questionId,
-      response: {
-        assignment: document.getElementById('submit').value,
-      },
-      maxMarks: maxMarks,
-    });
-
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(
-      `${process.env.REACT_APP_APIBASE_URL}/api/activityresponse/insert/?token=${localStorage.getItem('token')}`,
-      requestOptions
-    )
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
-  }
-
-  setModuleDesc(mod) {
-    descType = "";
-    this.setState({ desc: mod["desc"] });
   }
 
   render() {
@@ -209,11 +194,12 @@ class moduleCatalog extends Component {
           </div>
         </aside>
         <main id="content">
-
+        {mcontent}
         </main>
       </div>
     );
   }
+
 }
 
 export default withRouter(moduleCatalog);
