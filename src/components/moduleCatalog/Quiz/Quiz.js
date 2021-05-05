@@ -7,6 +7,7 @@ var questions = "";
 var size = 0;
 let qsize = 0;
 var submit = true;
+var contents;
 
 class Quiz extends Component {
   constructor(props){
@@ -18,12 +19,31 @@ class Quiz extends Component {
     this.submission = this.submission.bind(this);
   }
 
+  componentDidMount(){
+    contents = JSON.parse(this.props.children);
+    contents = contents[0];
+    qsize = contents['questions'].length;
+    var correct,reached,result;
+    contents['questions'] = contents['questions'].map((con,ind,arr) => {
+      [correct,reached,result] = this.getSubmitted(con['question_id'],ind+1);
+      con['result'] = result;
+      console.log('content after mapping =',con);
+      return con;
+    });
+
+    if(reached === true){
+      this.setState({loading: false});
+    }
+
+  }
+
   getSubmitted(qid,item){
     var requestOptions = {
       method: 'GET',
       redirect: 'follow'
     };
     var correct,json;
+    var reached = false;
     fetch(`${process.env.REACT_APP_APIBASE_URL}/api/activityresponse/latest/${localStorage.getItem('id')}/${this.props.pid}/${this.props.cid}/${this.props.cin}/${this.props.mid}/${this.props.aid}/${qid}?token=${localStorage.getItem('token')}`, requestOptions)
       .then(response => response.text())
       .then(result =>{
@@ -39,27 +59,24 @@ class Quiz extends Component {
           correct = result['error'];
         }
         json = result;
+
+        if(item === qsize){
+          reached = true;
+        }
+
       })
       .catch(error => console.log('error', error));
 
     console.log('correct in submitted =',correct);
 
-    var reached = false;
-    if(item === qsize){
-      reached = true;
-    }
-
     return [correct,reached,json];
   }
 
   setQuiz(){
-    var contents = JSON.parse(this.props.children);
-    contents = contents[0];
     size = 0;
 
     console.log('in quiz app contents = ')
     console.log(contents)
-        qsize = contents['questions'].length;
         var correct,reached,json;
         var content = contents['questions'].map(con =>{
           size = size + 1;
@@ -75,7 +92,7 @@ class Quiz extends Component {
           let options = con['options'].map(opt => {
                 op = op+1;
                 let ouniq = `OPT${size}${op}`;
-                [correct,reached,json] = this.getSubmitted(con['question_id'],size);
+                correct = con['result']['result'];
                 console.log(`correct = ${correct}`)
                 if(correct === true | correct === false){
                   console.log(`opt correct ${opt['correct']}`)
@@ -158,9 +175,6 @@ class Quiz extends Component {
         </div>);
 
         console.log('reached = ',reached)
-        if(reached === true){
-          this.setState({loading: false});
-        }
 
 
 
@@ -266,13 +280,13 @@ class Quiz extends Component {
 
   render() {
     if(this.state.loading === true & submit === true){
-      this.setQuiz();
       submit = false;
       return (<div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>);
     }
 
+    this.setQuiz();
 
 
     return (<div className="row" id="questions">{questions}
