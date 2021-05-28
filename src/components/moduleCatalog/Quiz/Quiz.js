@@ -3,12 +3,7 @@ import ReactDOM from "react-dom";
 import dompurify from "dompurify";
 import "./Quiz.css";
 
-var questions = "";
-var size = 0;
-let qsize = 0;
-var submit = true;
-var contents = [];
-
+var questions, size, qsize, submit, contents;
 class Quiz extends Component {
   constructor(props){
     super(props);
@@ -16,6 +11,11 @@ class Quiz extends Component {
       loading: true
     };
     // this.child = React.createRef();
+    questions = "";
+    size = 0;
+    qsize = 0;
+    submit = true;
+    contents = [];
     contents = JSON.parse(props.children);
     contents = contents[0]['questions'];
     qsize = contents.length;
