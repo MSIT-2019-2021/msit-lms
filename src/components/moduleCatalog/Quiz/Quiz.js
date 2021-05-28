@@ -19,7 +19,9 @@ class Quiz extends Component {
     contents = JSON.parse(props.children);
     contents = contents[0]['questions'];
     qsize = contents.length;
+    // submit = true;
     this.submission = this.submission.bind(this);
+    console.log('in constructor , loading state =',this.state.loading,"submit constructor =",submit);
   }
 
   // async componentDidMount(){
@@ -33,7 +35,8 @@ class Quiz extends Component {
 
   async getSubmitted(){
     console.log(`selected for index ${size} question = `);
-    console.log(contents[size])
+    console.log("contents = ",contents);
+    console.log("contents size =",contents[size])
     var qid = contents[size]['question_id'];
     var requestOptions = {
       method: 'GET',
@@ -355,6 +358,7 @@ class Quiz extends Component {
   }
 
   render() {
+    console.log("loading initial and submit initial = ",this.state.loading,submit);
     if(this.state.loading === true & submit === true){
       console.log('in render set quiz condition');
       this.getSubmitted();
@@ -364,7 +368,6 @@ class Quiz extends Component {
     }
 
     this.setQuiz();
-
     return (<div className="row" id="questions">{questions}
     </div>);
   }

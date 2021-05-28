@@ -6,7 +6,7 @@ var moduleData = "";
 var time = "";
 var evaluationStatus, awardedMarks;
 
-class submission extends Component {
+class Submission extends Component {
   constructor(props) {
     super(props);
     moduleData = JSON.parse(props.data);
@@ -177,4 +177,4 @@ class submission extends Component {
   }
 }
 
-export default withRouter(submission);
+export default withRouter(Submission);
