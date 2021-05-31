@@ -99,6 +99,8 @@ class CourseStatus extends Component {
 
   getCourses() {
 
+      ReactDOM.render(load,document.getElementById("Images"));
+      ReactDOM.render(load,document.getElementById("Tables"));
       // program = document.getElementById("programs");
       // var programID = program.options[program.selectedIndex].value;
       var token = localStorage.getItem("token");
@@ -158,12 +160,16 @@ class CourseStatus extends Component {
             });
 
               loading = false;
+              ReactDOM.render("",document.getElementById("Images"));
+              ReactDOM.render("",document.getElementById("Tables"));
               this.setState({clist:json['courses'],cselect:pid})
           }
           else{
 
             loading = false;
             var info = [{_id:"1" ,courseInstances:"No active courses in this program", courseID: {courseName:"No active courses in this program"}}]
+            ReactDOM.render("",document.getElementById("Images"));
+            ReactDOM.render("",document.getElementById("Tables"));
             this.setState({clist:info,cselect:pid})
           }
         })
@@ -173,9 +179,9 @@ class CourseStatus extends Component {
   }
 
   charts(){
-
-    document.getElementById("Images").innerHTML = "";
-    document.getElementById("Tables").innerHTML = "";
+    ReactDOM.render("",document.getElementById("Images"));
+    ReactDOM.render("",document.getElementById("Tables"));
+    
     var program = document.getElementById("program");
     pid = program.options[program.selectedIndex].value;
     ptitle = program.options[program.selectedIndex].text;
@@ -205,11 +211,11 @@ class CourseStatus extends Component {
             result = JSON.parse(result);
             var images = result[0];
             
-            var img_keys = ["pie","area","bar","scatter"];
+            var img_keys = ["area","bar","scatter"];
             images = img_keys.map(img => {
               var value = images[img];
               value = `data:image/png;base64,${value}`;
-              return <img className='flow-image' src={value} alt={img} />
+              return (<div className="row img-row-adjust"><img className="image-adjust" src={value} alt={img} /></div>);
             });
 
             var tables = result[1];
@@ -261,11 +267,11 @@ class CourseStatus extends Component {
             result = JSON.parse(result);
             var images = result[0];
             
-            var img_keys = ["pie","area","bar","scatter"];
+            var img_keys = ["area","bar","scatter"];
             images = img_keys.map(img => {
               var value = images[img];
               value = `data:image/png;base64,${value}`;
-              return <img className='flow-image' src={value} alt={img} />
+              return (<div className="row img-row-adjust"><img className="image-adjust" src={value} alt={img} /></div>);
             });
 
             var tables = result[1];

@@ -2,12 +2,17 @@
     height: calc(50% - 17px);
 }
 
-.flow-image{
-    height: 20rem
+.image-adjust{
+    height: fit-content;
 }
 
 thead{
     background-color: blueviolet;
+}
+
+.img-row-adjust{
+    height: fit-content;
+    margin-bottom: 4rem;
 }
 
 .row-adjust {
