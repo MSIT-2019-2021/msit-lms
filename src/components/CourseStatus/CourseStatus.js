@@ -101,6 +101,8 @@ class CourseStatus extends Component {
 
       // program = document.getElementById("programs");
       // var programID = program.options[program.selectedIndex].value;
+      ReactDOM.render(load,document.getElementById("content"));
+
       var token = localStorage.getItem("token");
       var userID = localStorage.getItem("id");
       var program = document.getElementById("program");
@@ -158,12 +160,14 @@ class CourseStatus extends Component {
             });
 
               loading = false;
+              ReactDOM.render("",document.getElementById("content"));
               this.setState({clist:json['courses'],cselect:pid})
           }
           else{
 
             loading = false;
             var info = [{_id:"1" ,courseInstances:"No active courses in this program", courseID: {courseName:"No active courses in this program"}}]
+            ReactDOM.render(load,document.getElementById("content"));
             this.setState({clist:info,cselect:pid})
           }
         })
@@ -174,8 +178,7 @@ class CourseStatus extends Component {
 
   charts(){
 
-    document.getElementById("Images").innerHTML = "";
-    document.getElementById("Tables").innerHTML = "";
+    ReactDOM.render("",document.getElementById("content"));
     var program = document.getElementById("program");
     pid = program.options[program.selectedIndex].value;
     ptitle = program.options[program.selectedIndex].text;
@@ -188,8 +191,7 @@ class CourseStatus extends Component {
     var PTitle = ptitle.split(' ').join('zzz');
     if(this.state.cselect === ""){
 
-      ReactDOM.render(load,document.getElementById("Images"));
-      ReactDOM.render(load,document.getElementById("Tables"));
+      ReactDOM.render(load,document.getElementById("content"));
 
         var requestOptions = {
           method: 'POST',
@@ -205,11 +207,12 @@ class CourseStatus extends Component {
             result = JSON.parse(result);
             var images = result[0];
             
-            var img_keys = ["pie","area","bar","scatter"];
+            // var img_keys = ["pie","area","bar","scatter"];
+            var img_keys = ["area","bar","scatter"];
             images = img_keys.map(img => {
               var value = images[img];
               value = `data:image/png;base64,${value}`;
-              return <img className='flow-image' src={value} alt={img} />
+              return (<div class="col"><img className='flow-adjust' src={value} alt={img} /></div>)
             });
 
             var tables = result[1];
@@ -219,8 +222,8 @@ class CourseStatus extends Component {
               return <div className="row" dangerouslySetInnerHTML={{ __html: value}}/>
             })
             loading = false;
-            ReactDOM.render(images,document.getElementById("Images"));
-            ReactDOM.render(tables,document.getElementById("Tables"));
+            var content = (<div className="container"><div className="overflow-scroll"><div className="row">{images}</div></div>{tables}</div>)
+            ReactDOM.render(content,document.getElementById("content"));
           
           })
           .catch(error => console.log('error', error));
@@ -241,8 +244,7 @@ class CourseStatus extends Component {
 
       console.log("cid =",cid,"ctitle =",ctitle);
 
-      ReactDOM.render(load,document.getElementById("Images"));
-      ReactDOM.render(load,document.getElementById("Tables"));
+      ReactDOM.render(load,document.getElementById("content"));
 
       // document.getElementById("course").disabled = true;
 
@@ -261,11 +263,12 @@ class CourseStatus extends Component {
             result = JSON.parse(result);
             var images = result[0];
             
-            var img_keys = ["pie","area","bar","scatter"];
+            // var img_keys = ["pie","area","bar","scatter"];
+            var img_keys = ["area","bar","scatter"];
             images = img_keys.map(img => {
               var value = images[img];
               value = `data:image/png;base64,${value}`;
-              return <img className='flow-image' src={value} alt={img} />
+              return (<div className="col"><img className='flow-adjust' src={value} alt={img} /></div>)
             });
 
             var tables = result[1];
@@ -274,9 +277,17 @@ class CourseStatus extends Component {
               var value = tables[tab];
               return <div className="row" dangerouslySetInnerHTML={{ __html: value}}/>
             })
+
             loading = false;
-            ReactDOM.render(images,document.getElementById("Images"));
-            ReactDOM.render(tables,document.getElementById("Tables"));
+            var content = (<div className="container">
+                            <div className="overflow-scroll">
+                              <div className="row">
+                              {images}
+                              </div>
+                            </div>
+                            {tables}
+                          </div>);
+            ReactDOM.render(content,document.getElementById("content"));
           
           })
           .catch(error => console.log('error', error));
@@ -414,16 +425,9 @@ class CourseStatus extends Component {
             <div className="row">
             {card}
             </div>
-    <div className="row row-adjust">
-    <div className="col">
-      <div id="Images" className="overflow-scroll flow-adjust">
-      </div>
-    </div>
-    <div className="col">
-      <div id="Tables" className="overflow-scroll flow-adjust">
-      </div>
-    </div>
-    </div>
+    <div id="content" className="content">
+    
+  </div>
   </div>);
   }
 }
