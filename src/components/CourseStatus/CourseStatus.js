@@ -222,7 +222,7 @@ class CourseStatus extends Component {
               return <div className="row" dangerouslySetInnerHTML={{ __html: value}}/>
             })
             loading = false;
-            var content = (<div className="container"><div className="overflow-scroll"><div className="row">{images}</div></div>{tables}</div>)
+            var content = (<div className="container"><div className="row">{images}</div>{tables}</div>)
             ReactDOM.render(content,document.getElementById("content"));
           
           })
@@ -280,11 +280,9 @@ class CourseStatus extends Component {
 
             loading = false;
             var content = (<div className="container">
-                            <div className="overflow-scroll">
                               <div className="row">
                               {images}
                               </div>
-                            </div>
                             {tables}
                           </div>);
             ReactDOM.render(content,document.getElementById("content"));
