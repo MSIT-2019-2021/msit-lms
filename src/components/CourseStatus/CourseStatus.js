@@ -20,9 +20,11 @@ class CourseStatus extends Component {
       clist:[],
       cselect:""
     };
+    // this.chartAuthorize();
   }
 
-  componentWillMount(){
+  componentDidMount(){
+
     this.chartAuthorize()
     // setInterval(this.chartAuthorize, 100000);
   }
@@ -211,7 +213,7 @@ class CourseStatus extends Component {
             result = JSON.parse(result);
             var images = result[0];
             
-            var img_keys = ["area","bar","scatter"];
+            var img_keys = ["eval","area","bar","scatter"];
             images = img_keys.map(img => {
               var value = images[img];
               value = `data:image/png;base64,${value}`;
@@ -219,7 +221,7 @@ class CourseStatus extends Component {
             });
 
             var tables = result[1];
-            var tab_keys = ["coursetable","programtable","pietable","bartable","scattertable"]
+            var tab_keys = ["coursetable","programtable","evaltable","bartable","scattertable"]
             tables = tab_keys.map(tab => {
               var value = tables[tab];
               return <div className="row" dangerouslySetInnerHTML={{ __html: value}}/>
@@ -267,7 +269,7 @@ class CourseStatus extends Component {
             result = JSON.parse(result);
             var images = result[0];
             
-            var img_keys = ["area","bar","scatter"];
+            var img_keys = ["eval","area","bar","scatter"];
             images = img_keys.map(img => {
               var value = images[img];
               value = `data:image/png;base64,${value}`;
@@ -275,7 +277,7 @@ class CourseStatus extends Component {
             });
 
             var tables = result[1];
-            var tab_keys = ["coursetable","moduletable","pietable","bartable","scattertable"]
+            var tab_keys = ["coursetable","moduletable","evaltable","bartable","scattertable"]
             tables = tab_keys.map(tab => {
               var value = tables[tab];
               return <div className="row" dangerouslySetInnerHTML={{ __html: value}}/>
@@ -430,6 +432,9 @@ class CourseStatus extends Component {
       </div>
     </div>
     </div>
+    <body>
+    
+    </body>
   </div>);
   }
 }
