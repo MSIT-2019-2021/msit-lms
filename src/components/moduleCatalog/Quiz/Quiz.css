@@ -10,6 +10,10 @@
   border-color: beige;
 }
 
+.position{
+  position: absolute;
+}
+
 .custom-btn {
   width: auto;
 }

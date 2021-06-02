@@ -209,10 +209,15 @@ class CourseStatus extends Component {
             
             // var img_keys = ["pie","area","bar","scatter"];
             var img_keys = ["area","bar","scatter"];
-            images = img_keys.map(img => {
+            images = img_keys.map((img,ind,arr) => {
               var value = images[img];
               value = `data:image/png;base64,${value}`;
-              return (<div class="col"><img className='flow-adjust' src={value} alt={img} /></div>)
+
+              if(ind === 0){
+                return (<div class="carousel-item active"><img className='flow-adjust' src={value} alt={img} /></div>);
+              }
+
+              return (<div class="carousel-item"><img className='flow-adjust' src={value} alt={img} /></div>);
             });
 
             var tables = result[1];
@@ -222,7 +227,20 @@ class CourseStatus extends Component {
               return <div className="row" dangerouslySetInnerHTML={{ __html: value}}/>
             })
             loading = false;
-            var content = (<div className="container"><div className="row">{images}</div>{tables}</div>)
+            var content = (<div className="container">
+                        <div id="carouselExampleFade" class="carousel slide carousel-fade carousel-adjust" data-bs-ride="carousel">
+                          <div class="carousel-inner">
+                            {images}
+                          </div>
+                          <button class="carousel-control-prev carousel-btn" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                          </button>
+                          <button class="carousel-control-next carousel-btn" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                          </button>
+                      </div>{tables}</div>);
             ReactDOM.render(content,document.getElementById("content"));
           
           })
@@ -265,10 +283,15 @@ class CourseStatus extends Component {
             
             // var img_keys = ["pie","area","bar","scatter"];
             var img_keys = ["area","bar","scatter"];
-            images = img_keys.map(img => {
+            images = img_keys.map((img,ind,arr) => {
               var value = images[img];
               value = `data:image/png;base64,${value}`;
-              return (<div className="col"><img className='flow-adjust' src={value} alt={img} /></div>)
+
+              if(ind === 0){
+                return (<div class="carousel-item active"><img className='flow-adjust' src={value} alt={img} /></div>);
+              }
+
+              return (<div class="carousel-item"><img className='flow-adjust' src={value} alt={img} /></div>);
             });
 
             var tables = result[1];
@@ -280,11 +303,19 @@ class CourseStatus extends Component {
 
             loading = false;
             var content = (<div className="container">
-                              <div className="row">
-                              {images}
-                              </div>
-                            {tables}
-                          </div>);
+                        <div id="carouselExampleFade" class="carousel slide carousel-fade carousel-adjust" data-bs-ride="carousel">
+                          <div class="carousel-inner">
+                            {images}
+                          </div>
+                          <button class="carousel-control-prev carousel-btn" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                          </button>
+                          <button class="carousel-control-next carousel-btn" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                          </button>
+                      </div>{tables}</div>);
             ReactDOM.render(content,document.getElementById("content"));
           
           })
