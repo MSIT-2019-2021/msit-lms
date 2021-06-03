@@ -371,7 +371,7 @@ class CourseStatus extends Component {
 
           </div>
       <div class="col-sm">
-      <button type="button" class="btn btn-primary" onClick={() => {ReactDOM.render("",document.getElementById("subcourse"));pid="Select Program"; ptitle="Select Program";this.setState({cselect: ""}); ctitle="Select Course"; cid=ctitle; loading = false; }}>Back</button>
+      <button type="button" class="btn btn-primary" onClick={() => {ReactDOM.render("",document.getElementById("subcourse"));ReactDOM.render("",document.getElementById("content"));pid="Select Program"; ptitle="Select Program";this.setState({cselect: ""}); ctitle="Select Course"; cid=ctitle; loading = false; }}>Back</button>
       </div>
       <div class="col-sm">
       <button type="button" class="btn btn-primary" onClick={() => {this.charts()}}>Enter</button>
