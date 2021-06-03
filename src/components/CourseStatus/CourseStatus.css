@@ -2,8 +2,8 @@
     height: calc(50% - 17px);
 }
 
-.flow-image{
-    height: 20rem
+.image-adjust{
+    height: fit-content;
 }
 
 thead{
@@ -21,6 +21,11 @@ thead{
 .alert-adjust{
     margin-top: 5rem;
     width: fit-content;
+}
+
+.img-row-adjust{
+    height: fit-content;
+    margin-bottom: 4rem;
 }
 
 .row-adjust {

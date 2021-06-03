@@ -11,15 +11,6 @@ var loading = true;
 var load = (<div class="spinner-border" role="status">
                 <span class="visually-hidden">Loading...</span>
                 </div>);
-
-var info = (
-    <div class='alert alert-dark alert-adjust position-absolute top-50 start-50 translate-middle' role='alert'>
-      <h4 class='alert-heading'>No Data available for the selection</h4>
-      <hr></hr>
-      <p class='mb-0'>Kindly, contact your mentor for more Information.</p>
-    </div>);
-    
-
 class CourseStatus extends Component {
 
   constructor(props) {
@@ -48,7 +39,7 @@ class CourseStatus extends Component {
       .catch(error => console.log('error', error));
   }
 
-  chartAuthorize(){
+  async chartAuthorize(){
 
 
       var requestOptions = {
@@ -64,20 +55,42 @@ class CourseStatus extends Component {
           if(result['state'] === "Invalid" ){
               throw "Invalid credentials";
           }
-          else{
-          this.getPrograms(result['programs']);
-          }
+          this.getPrograms();
         })
         .catch(error => {console.log('error', error)});
 
   }
 
 
-  getPrograms(programs) {
-
-    loading = false;
-    this.setState({ plist: programs});
-
+  getPrograms() {
+    var token = localStorage.getItem("token");
+    var userID = localStorage.getItem("id");
+    console.log(process.env.REACT_APP_APIBASE_URL);
+    fetch(
+      process.env.REACT_APP_APIBASE_URL +
+        "/api/program/get/enrolled_programs/" +
+        userID +
+        "/?token=" +
+        token
+    )
+      .then((response) => response.text())
+      .then((result) => {
+        var json = JSON.parse(result);
+        // json = json[0]['enrollments'];
+        console.log("get programs api fetched");
+        console.log(json[0]["enrollments"])
+        // console.log(json);
+        if (json[0]["enrollments"][0]["programID"] !== null) {
+          // console.log(json[0]["enrollments"]);
+          // this.setCourse(json[0]['enrollments'])
+          loading = false;
+          this.setState({ plist: json[0]["enrollments"]});
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+        loading = false ;
+      });
   }
 
   // setCourse(progs){
@@ -86,8 +99,12 @@ class CourseStatus extends Component {
 
   getCourses() {
 
-    ReactDOM.render("",document.getElementById("content"));
-
+      ReactDOM.render(load,document.getElementById("Images"));
+      ReactDOM.render(load,document.getElementById("Tables"));
+      // program = document.getElementById("programs");
+      // var programID = program.options[program.selectedIndex].value;
+      var token = localStorage.getItem("token");
+      var userID = localStorage.getItem("id");
       var program = document.getElementById("program");
 
       pid = program.options[program.selectedIndex].value;
@@ -98,14 +115,73 @@ class CourseStatus extends Component {
       return;
     }
     
-    loading = false;
-    this.setState({clist:pid,cselect:pid});
+      // programID = localStorage.getItem("program");
+      // programID = this.props.match.params.programId
+      console.log("pid =",pid,"ptitle =",ptitle);
+      console.log(
+        `course fetch api = ${process.env.REACT_APP_APIBASE_URL}/api/course/get/courseinfo/${userID}/${pid}/?token=${token}`
+      );
+      fetch(
+        process.env.REACT_APP_APIBASE_URL +
+          "/api/course/get/courseinfo/" +
+          userID +
+          "/" +
+          pid +
+          "/?token=" +
+          token
+      ).then((response) => response.text())
+      .then((result) => {
+          console.log(`course result =`);
+          console.log(result);
+          var json = JSON.parse(result);
+          // json = json[0]['enrollments'];
+          console.log("course data");
+          console.log(json);
 
+          if (json["courses"].length !== 0) {
+              
+            json['courses'] = json['courses'].map(course => {
+
+              course['courseInstances'] = course['courseInstances'].filter((obj) => {
+                return obj["isLive"] === true;
+              });
+
+              // console.log('mapped course =');
+              // console.log(course)
+              return course;
+            });
+
+            json['courses'] = json['courses'].filter((obj) => {
+              // console.log('filtering courses =');
+              // console.log(obj)
+              // console.log('course instance details =');
+              // console.log(obj['courseInstances']);
+              return obj['courseInstances'].length !== 0;
+            });
+
+              loading = false;
+              ReactDOM.render("",document.getElementById("Images"));
+              ReactDOM.render("",document.getElementById("Tables"));
+              this.setState({clist:json['courses'],cselect:pid})
+          }
+          else{
+
+            loading = false;
+            var info = [{_id:"1" ,courseInstances:"No active courses in this program", courseID: {courseName:"No active courses in this program"}}]
+            ReactDOM.render("",document.getElementById("Images"));
+            ReactDOM.render("",document.getElementById("Tables"));
+            this.setState({clist:info,cselect:pid})
+          }
+        })
+        .catch((error) => {
+          console.log("error", error)
+      });
   }
 
   charts(){
-
-    ReactDOM.render("",document.getElementById("content"));
+    ReactDOM.render("",document.getElementById("Images"));
+    ReactDOM.render("",document.getElementById("Tables"));
+    
     var program = document.getElementById("program");
     pid = program.options[program.selectedIndex].value;
     ptitle = program.options[program.selectedIndex].text;
@@ -118,7 +194,8 @@ class CourseStatus extends Component {
     var PTitle = ptitle.split(' ').join('zzz');
     if(this.state.cselect === ""){
 
-      ReactDOM.render(load,document.getElementById("content"));
+      ReactDOM.render(load,document.getElementById("Images"));
+      ReactDOM.render(load,document.getElementById("Tables"));
 
         var requestOptions = {
           method: 'POST',
@@ -132,25 +209,13 @@ class CourseStatus extends Component {
           .then(result => {
             console.log(result)
             result = JSON.parse(result);
-
-            if(result['state'] !== undefined & result['state'] === "data not found"){
-              ReactDOM.render(info,document.getElementById("content"));
-              return;
-            }
-
             var images = result[0];
             
-            // var img_keys = ["pie","area","bar","scatter"];
             var img_keys = ["area","bar","scatter"];
-            images = img_keys.map((img,ind,arr) => {
+            images = img_keys.map(img => {
               var value = images[img];
               value = `data:image/png;base64,${value}`;
-
-              if(ind === 0){
-                return (<div class="carousel-item active"><img className='flow-adjust' src={value} alt={img} /></div>);
-              }
-
-              return (<div class="carousel-item"><img className='flow-adjust' src={value} alt={img} /></div>);
+              return (<div className="row img-row-adjust"><img className="image-adjust" src={value} alt={img} /></div>);
             });
 
             var tables = result[1];
@@ -160,21 +225,8 @@ class CourseStatus extends Component {
               return <div className="row" dangerouslySetInnerHTML={{ __html: value}}/>
             })
             loading = false;
-            var content = (<div className="container">
-                        <div id="carouselExampleFade" class="carousel slide carousel-fade carousel-adjust" data-bs-ride="carousel">
-                          <div class="carousel-inner">
-                            {images}
-                          </div>
-                          <button class="carousel-control-prev carousel-btn" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                          </button>
-                          <button class="carousel-control-next carousel-btn" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                          </button>
-                      </div>{tables}</div>);
-            ReactDOM.render(content,document.getElementById("content"));
+            ReactDOM.render(images,document.getElementById("Images"));
+            ReactDOM.render(tables,document.getElementById("Tables"));
           
           })
           .catch(error => console.log('error', error));
@@ -195,7 +247,8 @@ class CourseStatus extends Component {
 
       console.log("cid =",cid,"ctitle =",ctitle);
 
-      ReactDOM.render(load,document.getElementById("content"));
+      ReactDOM.render(load,document.getElementById("Images"));
+      ReactDOM.render(load,document.getElementById("Tables"));
 
       // document.getElementById("course").disabled = true;
 
@@ -212,25 +265,13 @@ class CourseStatus extends Component {
           .then(result => {
             console.log(result)
             result = JSON.parse(result);
-
-            if(result['state'] !== undefined & result['state'] === "data not found"){
-              ReactDOM.render(info,document.getElementById("content"));
-              return;
-            }
-
             var images = result[0];
             
-            // var img_keys = ["pie","area","bar","scatter"];
             var img_keys = ["area","bar","scatter"];
-            images = img_keys.map((img,ind,arr) => {
+            images = img_keys.map(img => {
               var value = images[img];
               value = `data:image/png;base64,${value}`;
-
-              if(ind === 0){
-                return (<div class="carousel-item active"><img className='flow-adjust' src={value} alt={img} /></div>);
-              }
-
-              return (<div class="carousel-item"><img className='flow-adjust' src={value} alt={img} /></div>);
+              return (<div className="row img-row-adjust"><img className="image-adjust" src={value} alt={img} /></div>);
             });
 
             var tables = result[1];
@@ -239,23 +280,9 @@ class CourseStatus extends Component {
               var value = tables[tab];
               return <div className="row" dangerouslySetInnerHTML={{ __html: value}}/>
             })
-
             loading = false;
-            var content = (<div className="container">
-                        <div id="carouselExampleFade" class="carousel slide carousel-fade carousel-adjust" data-bs-ride="carousel">
-                          <div class="carousel-inner">
-                            {images}
-                          </div>
-                          <button class="carousel-control-prev carousel-btn" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                          </button>
-                          <button class="carousel-control-next carousel-btn" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                          </button>
-                      </div>{tables}</div>);
-            ReactDOM.render(content,document.getElementById("content"));
+            ReactDOM.render(images,document.getElementById("Images"));
+            ReactDOM.render(tables,document.getElementById("Tables"));
           
           })
           .catch(error => console.log('error', error));
@@ -278,9 +305,9 @@ class CourseStatus extends Component {
     var subcourses = subcid.map((obj,ind,arr)=>{
       console.log('obj =',obj)
       if(ind === 0){
-        return <option defaultValue={obj["id"]} value={obj["id"]} key={obj["id"]}>{obj["instance"]}</option>
+        return <option defaultValue={obj["_id"]} value={obj["_id"]} key={obj["_id"]}>{obj["courseInstanceLabel"]}</option>
       }
-      return <option value={obj["id"]} key={obj["id"]}>{obj["instance"]}</option>
+      return <option value={obj["_id"]} key={obj["_id"]}>{obj["courseInstanceLabel"]}</option>
     });
 
     subcid = (<select id="subselect" className="form-select">{subcourses}</select>);
@@ -302,10 +329,8 @@ class CourseStatus extends Component {
       list = (<option value="No programs to display">No programs to display</option>);
     }
     else{
-    list = list.map((program,ind,arr) => {
-          var courses = JSON.stringify(program['Courses']);
-          var key = `P${ind}`;
-          return <option value={courses} key={key}>{program["program"]}</option>
+    list = list.map((program) => {
+          return <option value={program["programID"]["_id"]} key={program["programID"]["_id"]}>{program["programID"]["programName"]}</option>
         });
     }
 
@@ -336,13 +361,12 @@ class CourseStatus extends Component {
       }
       else if (this.state.cselect === pid){
         var clist = this.state.clist ;
-        clist = JSON.parse(clist);
         console.log('course list  = ');
         console.log(clist)
         if(clist.length !== 0){
-          clist = clist.map((program,ind,arr) => {
-          var key  = `C${ind}`
-          return <option value={JSON.stringify(program["instances"])} key={key}>{program['Course']}</option>
+          clist = clist.map((program) => {
+          console.log('course instances =',program["courseInstances"]);
+          return <option value={JSON.stringify(program["courseInstances"])} key={program["_id"]}>{program['courseID']['courseName']}</option>
           });
         }else{
           clist = (<option>No active courses in this program</option>);
@@ -396,9 +420,16 @@ class CourseStatus extends Component {
             <div className="row">
             {card}
             </div>
-    <div id="content" className="content position-relative">
-    
-  </div>
+    <div className="row row-adjust">
+    <div className="col">
+      <div id="Images" className="overflow-scroll flow-adjust">
+      </div>
+    </div>
+    <div className="col">
+      <div id="Tables" className="overflow-scroll flow-adjust">
+      </div>
+    </div>
+    </div>
   </div>);
   }
 }
