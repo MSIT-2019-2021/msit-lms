@@ -7,10 +7,10 @@ class sideBar extends Component {
       activeId = this.props.name;
       this.setState({ active: this.props.name });
       this.props.desc(JSON.stringify(this.props.module));
-      return "moduleButton active";
+      return "moduleButton activated";
     }
     if (active === activeId) {
-      return "moduleButton active";
+      return "moduleButton activated";
     }
     return "moduleButton";
   }

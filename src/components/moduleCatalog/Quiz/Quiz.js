@@ -102,18 +102,18 @@ class Quiz extends Component {
             // console.log('options if submitted');
             // console.log(con['options']);
 
-            // con['options'] = con['options'].filter((realOPT,ind,arr) => {
-            //   console.log("filter check = ")
-            //   console.log(realOPT['correct'])
-            //   return realOPT['correct'] === true;
-            // });
+            con['options'] = con['options'].filter((realOPT,ind,arr) => {
+              console.log("filter check = ")
+              console.log(realOPT['correct'])
+              return realOPT['correct'] === true;
+            });
 
-            // console.log('quizz after filter');
-            // console.log(con['options']);
+            console.log('quizz after filter');
+            console.log(con['options']);
 
-            // con['options'] = con['options'].map((realOPT,ind,arr)=>{
-            //   return realOPT['option'];
-            // });
+            var answers = con['options'].map((realOPT,ind,arr)=>{
+              return (<li>{realOPT['option']}</li>);
+            });
 
             let options = json['response']['choices'].map((opt) => {
               op = op+1;
@@ -177,10 +177,13 @@ class Quiz extends Component {
                   <p className="text-end">submitted on {json['timestamp']}</p>
                   </div>
                 </div>
-              </div>
+                  <div class="row"><p className="text-start text-success fw-bolder">Answers :</p>
+                    {answers}
+                  </div>
+                </div>
               
               </div>
-              </div>);
+            </div>);
           }
 
           let options = con['options'].map((opt) => {
@@ -303,6 +306,8 @@ class Quiz extends Component {
       var answers = [];
       console.log(options);
       options.forEach((element,ind,arr) => {
+          console.log(' correct options value =');
+          console.log(element.value);
           if(element.value === true | element.value === "true"){
             answers.push(ind)
           }
@@ -365,7 +370,7 @@ class Quiz extends Component {
 
     this.setQuiz();
 
-    return (<div className="row" id="questions">{questions}
+    return (<div className="row position" id="questions">{questions}
     </div>);
   }
 }

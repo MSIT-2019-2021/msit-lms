@@ -7,7 +7,20 @@
 }
 
 thead{
-    background-color: blueviolet;
+    background-color: #6f42c1;
+}
+
+.carousel-adjust{
+    margin-bottom: 2rem;
+}
+
+.carousel-btn{
+    background-color: #6f42c1;
+}
+
+.alert-adjust{
+    margin-top: 5rem;
+    width: fit-content;
 }
 
 .img-row-adjust{
@@ -29,6 +42,6 @@ thead{
     display: contents;
 }
 
-.flow-adjust{
+/* .flow-adjust{
     height: 100%;
-}
+} */
