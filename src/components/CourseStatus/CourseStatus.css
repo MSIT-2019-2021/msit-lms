@@ -18,6 +18,11 @@ thead{
     background-color: #6f42c1;
 }
 
+.alert-adjust{
+    margin-top: 5rem;
+    width: fit-content;
+}
+
 .row-adjust {
     width: 100%;
     height: -webkit-fill-available;
