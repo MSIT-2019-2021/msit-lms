@@ -61,8 +61,9 @@ class Quiz extends Component {
         // contents[size] = Object.assign(contents[size],)
         contents[size]['result'] = json;
         if(size+1 === qsize){
-          this.setState({loading: false});
           submit = false;
+          this.setState({loading: false});
+          
         }else{
           size = size + 1;
           this.setState({
@@ -154,7 +155,7 @@ class Quiz extends Component {
 
                 return (<div key={uniq} className="card border-primary mb-3 custom-card">
               <div
-              className='card-header bg-transparent'
+              className='card-header quiz_header'
               dangerouslySetInnerHTML={{
                 __html: dompurify.sanitize(question),
               }}
@@ -200,14 +201,14 @@ class Quiz extends Component {
 
             return (<div key={uniq} className="card border-primary mb-3 custom-card">
             <div
-            className='card-header bg-transparent'
+            className='card-header quiz_header'
             dangerouslySetInnerHTML={{
               __html: dompurify.sanitize(question),
             }}
           />
             <div className="card-body position-relative" id={"Q"+qind.toString()}>
               {options}
-            <button className="btn-primary custom-btn position-absolute bottom-0 end-0" id={`Btn${qind}`} type="button" onClick={() => {this.submission(qind.toString())}}>Submit</button>
+            <button className="btn-primary btn list-button custom-btn position-absolute bottom-0 end-0" id={`Btn${qind}`} type="button" onClick={() => {this.submission(qind.toString())}}>Submit</button>
             </div>
             <div className="card-footer bg-transparent" id={"Sub"+qind.toString()}></div>
             </div>);
@@ -289,10 +290,12 @@ class Quiz extends Component {
 
       var info = document.getElementById("Sub"+ind);
       if(correct === true){
-        ReactDOM.render((<p className="text-success fw-bolder">Correct</p>),info);
+        ReactDOM.render((<p className="text-success text-center fw-bolder">Correct</p>),info);
       }else{
-        ReactDOM.render((<p className="text-danger fw-bolder">Incorrect</p>),info);
+        ReactDOM.render((<p className="text-danger text-center fw-bolder">Incorrect</p>),info);
       }
+
+
 
       })
       .catch((error) => console.log("error", error));
@@ -363,6 +366,7 @@ class Quiz extends Component {
     if(this.state.loading === true & submit === true){
       console.log('in render set quiz condition');
       this.getSubmitted();
+
       return (<div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>);
