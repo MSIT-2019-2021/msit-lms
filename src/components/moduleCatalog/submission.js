@@ -3,13 +3,13 @@ import React, { Component } from "react";
 import { withRouter } from "react-router";
 
 var moduleData = "";
-var time = "";
-var evaluationStatus, awardedMarks;
+
+var time, evaluationStatus, awardedMarks;
 
 class submission extends Component {
   constructor(props) {
     super(props);
-    moduleData = JSON.parse(props.data);
+    moduleData = props.data;
     console.log("moduleData:", moduleData);
     this.state = {
       verifySubmission: "",
@@ -56,16 +56,17 @@ class submission extends Component {
               };
               return new Date(dateString).toLocaleDateString("en-GB", options);
             };
-            this.setState({
-              loading: false,
-              verifySubmission: result["response"]["assignment"],
-            });
             time = formatDate(result.timestamp);
 
             evaluationStatus = result.evaluationStatus;
             awardedMarks = evaluationStatus
               ? result.awardedMarks
               : "Yet to Evaluate Submission";
+            this.setState({
+              loading: false,
+              verifySubmission: result["response"]["assignment"],
+            });
+
             console.log(time);
           }
         } catch (error) {

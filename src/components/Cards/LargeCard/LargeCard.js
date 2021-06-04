@@ -31,7 +31,7 @@ class LargeCard extends Component {
       <div class='card large_card mb-3 pad'>
         <div class='row g-0'>
           <div class='col'>
-            <div class='card-body position-relative'>
+            <div class='card-body position-relative largeCard'>
               <h5 class='card-title'>{this.props.title}</h5>
 
               {/* <p class='card-text text-prop'>{this.props.description}</p> */}

@@ -1,13 +1,7 @@
 .custom-card {
-  height: 20rem;
-  margin-left: auto;
-  margin-top: auto;
-}
-/* .text-success{
-    color: white;
-} */
-.border-success {
-  border-color: beige;
+  display: flex;
+  text-align: left;
+  height: auto;
 }
 
 .position{
@@ -16,4 +10,9 @@
 
 .custom-btn {
   width: auto;
+  margin-top: 20px;
+}
+.quiz_header {
+  background-color: #563d7c;
+  color: whitesmoke;
 }

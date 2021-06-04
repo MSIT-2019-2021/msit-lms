@@ -82,6 +82,13 @@ class Profile extends Component {
     }
 
     render() {
+
+        var user = localStorage.getItem("token");
+        user ??
+        this.props.history.push({
+            pathname: "/",
+        });
+
         var name = 'Null';
         var firstName = 'Null';
         var lastName = 'Null';

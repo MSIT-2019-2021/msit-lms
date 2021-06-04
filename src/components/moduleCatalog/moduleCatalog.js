@@ -37,12 +37,12 @@ class moduleCatalog extends Component {
     // this.submitNow = this.submitNow.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     var token = localStorage.getItem("token");
     moduleData.courseInstanceId = this.props.match.params.courseInstanceId;
     moduleData.courseId = this.props.match.params.courseId;
     moduleData.programId = this.props.match.params.programId;
-    console.log(moduleData.courseId, moduleData.programId);
+    // console.log(moduleData.courseId, moduleData.programId);
 
     let link = `${process.env.REACT_APP_APIBASE_URL}/api/content/get/content-json/${moduleData.courseInstanceId}/?token=${token}`;
     console.log(link);
@@ -51,7 +51,7 @@ class moduleCatalog extends Component {
     })
       .then((response) => response.text())
       .then((result) => {
-        // console.log("result = ");
+        // //console.log("result = ");
         // console.log(result);
         var json = JSON.parse(result);
         // console.log(json.contentJSON[0]);
@@ -59,7 +59,10 @@ class moduleCatalog extends Component {
           this.setState({ list: json.contentJSON, loading: false });
         }
       })
-      .catch((error) => console.log("error", error));
+      .catch((error) => {
+        console.log("error", error);
+        this.setState({ loading: false });
+      });
   }
 
   SetSideBar(list) {
@@ -86,27 +89,27 @@ class moduleCatalog extends Component {
     moduleData.moduleId = Id;
     moduleData.activityId = descript['activity_id'];
     var description = descript["activity_json"];
-    console.log(description);
-    console.log(
-      `switch assignment condition ${
-        description[0]["activityType"] === "assignment"
-      }`
-    );
+    moduleData.activityId = descript["activity_id"];
+    //  console.log(description);
+
     if (description[0]["activityType"] === "quiz") {
       description = JSON.stringify(description);
-      moduleDescription = <Quiz key={moduleData.activityId} data={moduleData}>{description}</Quiz>;
+      moduleDescription = (
+        <Quiz key={moduleData.activityId} data={moduleData}>
+          {description}
+        </Quiz>
+      );
     } else if (description[0]["activityType"] === "assignment") {
-      moduleData.activityId = descript["activity_id"];
       var html = "<div>";
       description.forEach((desc) => {
-        console.log(desc);
+        //   console.log(desc);
         html = "<h1>" + html + desc["title"] + "</h1><br></br>";
         if (desc["text"] !== undefined) {
           html = html + desc["text"];
         } else if (desc["questions"]?.[0]) {
           moduleData.questionId = desc["questions"][0]["question_id"];
           moduleData.activityType = desc["activityType"];
-          console.log("qsId", moduleData.questionId);
+          // console.log("qsId", moduleData.questionId);
           moduleData.maxMarks = desc["questions"][0]["max_marks"];
           html =
             html +
@@ -128,7 +131,7 @@ class moduleCatalog extends Component {
           />
           <Submission
             key={moduleData.questionId}
-            data={JSON.stringify(moduleData)}></Submission>
+            data={moduleData}></Submission>
         </div>
       );
       // console.log("submod,:", moduleDescription);
@@ -137,7 +140,7 @@ class moduleCatalog extends Component {
       moduleData.activityId = descript["activity_id"];
       html = "<div>";
       description.forEach((desc) => {
-        console.log(desc);
+        // console.log(desc);
         html = "<h1>" + html + desc["title"] + "</h1><br></br>";
         if (desc["text"] !== undefined) {
           html = html + desc["text"];
@@ -158,11 +161,11 @@ class moduleCatalog extends Component {
       description[0]["activityType"] === "youtubevideo" ||
       description[0]["activityType"] === "video"
     ) {
-      console.log("youtube vedio");
+      //  console.log("youtube vedio");
       moduleData.activityId = descript["activity_id"];
       html = "<div>";
       description.forEach((desc) => {
-        console.log(desc);
+        //  console.log(desc);
         html = "<h1>" + html + desc["title"] + "</h1><br></br>";
       });
       html = html + "</div>";
@@ -232,13 +235,42 @@ class moduleCatalog extends Component {
   }
 
   render() {
-    console.log("module render");
-    if (this.state.loading) {
-      return <NavBar></NavBar>;
-    }
+    // console.log("module render");
 
+    var user = localStorage.getItem("token");
+        user ??
+        this.props.history.push({
+            pathname: "/",
+        });
+
+    if (this.state.loading) {
+      return (
+        <>
+          <NavBar />
+          <div class='spinner-border' role='status'>
+            <span class='visually-hidden'>Loading...</span>
+          </div>
+        </>
+      );
+    }
+    if (this.state.list === null)
+      return (
+        <>
+          <div className='nodata container mt-5'>
+            <NavBar />
+            <div class='alert alert-dark' role='alert'>
+              <h4 class='alert-heading'>No Modules to display</h4>
+              <p>You are not enrolled in this Program</p>
+              <hr></hr>
+              <p class='mb-0'>
+                Kindly, contact your mentor for more Information.
+              </p>
+            </div>
+          </div>
+        </>
+      );
     this.SetSideBar(this.state.list);
-    console.log(moduleData.questionId);
+    // console.log(moduleData.questionId);
     return (
       <div>
         <NavBar></NavBar>

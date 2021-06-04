@@ -75,3 +75,11 @@
 #courseDescription {
   font-weight: 800;
 }
+.programSelect {
+  margin-top: 20px;
+  width: fit-content;
+}
+.programSelect:focus {
+  border-color: #563d7c 0.5;
+  box-shadow: 0 0 0 0.25rem #563d7c;
+}

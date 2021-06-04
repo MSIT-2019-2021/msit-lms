@@ -1,33 +1,31 @@
 .customcard {
-    max-width: 540px;
-  }
-  
-  .card {
-    border-radius: 20px;
-  }
-  
-  /* .text-truncate {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: inherit;
-  } */
-  
-  .container {
-    padding-left: 0px;
-  }
-  
-  .overflow-scroll {
-    overflow: scroll !important;
-    width: -webkit-fill-available;
-    height: 25rem;
-  }
-  
-  .fs-5 {
-    font-weight: bold;
-  }
-  
-  .repocard {
-    height: 15rem;
-    weight: auto;
-  }
-  
+  max-width: 540px;
+}
+
+.card {
+  border-radius: 20px;
+}
+
+/* .text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: inherit;
+} */
+
+.container {
+  padding-left: 0px;
+}
+
+.overflow-scroll {
+  overflow: scroll !important;
+  width: -webkit-fill-available;
+  height: 25rem;
+}
+
+.fs-5 {
+  font-weight: bold;
+}
+
+.repocard {
+  height: 15rem;
+}

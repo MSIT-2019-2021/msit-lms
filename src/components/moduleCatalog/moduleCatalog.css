@@ -43,7 +43,7 @@ main {
   margin-left: 60vh;
   margin-top: 4%;
   width: 70%;
-  border-radius: 20px;
+  position: absolute;
   height: auto;
 }
 .contentarea {

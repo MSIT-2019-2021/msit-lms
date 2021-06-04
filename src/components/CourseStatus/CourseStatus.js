@@ -383,6 +383,13 @@ class CourseStatus extends Component {
   }
 
   render() {
+
+    var user = localStorage.getItem("token");
+        user ??
+        this.props.history.push({
+            pathname: "/",
+        });
+
     if(loading){
       console.log("in render loading")
       return (<div className="container">

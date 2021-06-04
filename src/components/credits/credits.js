@@ -53,6 +53,13 @@ class Credits extends Component{
 
     render()
     {
+
+        var user = localStorage.getItem("token");
+        user ??
+        this.props.history.push({
+            pathname: "/",
+        });
+
         var list = this.setCards(this.state.developers);
 
         return (<div class="container">
