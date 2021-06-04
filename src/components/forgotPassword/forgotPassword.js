@@ -63,7 +63,7 @@ class ForgotPassword extends Component {
                 <div id="dialog" className="input-group mb-3">
                   <input id="email" type="text" onChange={this.validate} className="form-control" placeholder="Enter email" aria-label="Enter email" aria-describedby="forgot">
                   </input>
-                  <button className="btn btn-outline-primary" type="button" id="forgot" onClick={this.handleClick}>Button</button>
+                  <button className="btn p-button" type="button" id="forgot" onClick={this.handleClick}>Submit</button>
                 </div>
                 </div>
                 </div>

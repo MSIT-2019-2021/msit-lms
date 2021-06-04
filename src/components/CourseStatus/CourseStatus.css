@@ -11,6 +11,11 @@ thead{
     color: white;
 }
 
+.stat-button{
+    background-color: #563d7c;
+    color: whitesmoke;
+}
+
 .carousel-adjust{
     margin-bottom: 2rem;
 }
