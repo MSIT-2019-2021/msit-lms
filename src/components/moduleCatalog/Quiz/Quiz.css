@@ -6,6 +6,7 @@
 
 .position{
   position: absolute;
+  width: -webkit-fill-available;
 }
 
 .custom-btn {

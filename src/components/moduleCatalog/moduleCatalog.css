@@ -73,3 +73,10 @@ main {
   position: relative;
   aspect-ratio: 16/9;
 }
+#submitTime {
+  display: flex;
+  margin-top: 25px;
+  margin-left: 25px;
+  font-size: large;
+  color: red;
+}

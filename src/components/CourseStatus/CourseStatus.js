@@ -168,11 +168,11 @@ class CourseStatus extends Component {
                           <div class="carousel-inner">
                             {images}
                           </div>
-                          <button class="carousel-control-prev carousel-btn" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                          <button class="carousel-control-prev carousel-btn" style={{color:"whitesmoke"}} type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                           </button>
-                          <button class="carousel-control-next carousel-btn" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                          <button class="carousel-control-next carousel-btn" style={{color:"whitesmoke"}} type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
                           </button>
@@ -249,11 +249,11 @@ class CourseStatus extends Component {
                           <div class="carousel-inner">
                             {images}
                           </div>
-                          <button class="carousel-control-prev carousel-btn" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                          <button class="carousel-control-prev carousel-btn" style={{color:"whitesmoke"}} type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                           </button>
-                          <button class="carousel-control-next carousel-btn" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                          <button class="carousel-control-next carousel-btn" style={{color:"whitesmoke"}} type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
                           </button>
@@ -328,10 +328,10 @@ class CourseStatus extends Component {
         </select>
         </div>
     <div class="col-sm">
-    <button type="button" class="btn stat-button" onClick={()=>{this.getCourses();}}>Select Course</button>
+    <button type="button" style={{color:"whitesmoke"}} class="btn stat-button" onClick={()=>{this.getCourses();}}>Select Course</button>
     </div>
     <div class="col-sm">
-    <button type="button" class="btn stat-button" onClick={() =>{this.charts()}}>Enter</button>
+    <button type="button" style={{color:"whitesmoke"}} class="btn stat-button" onClick={() =>{this.charts()}}>Enter</button>
     </div>
   </div>
       </div>
@@ -371,10 +371,10 @@ class CourseStatus extends Component {
 
           </div>
       <div class="col-sm">
-      <button type="button" class="btn stat-button" onClick={() => {ReactDOM.render("",document.getElementById("subcourse"));ReactDOM.render("",document.getElementById("content"));pid="Select Program"; ptitle="Select Program";this.setState({cselect: ""}); ctitle="Select Course"; cid=ctitle; loading = false; }}>Back</button>
+      <button type="button" style={{color:"whitesmoke"}} class="btn stat-button" onClick={() => {ReactDOM.render("",document.getElementById("subcourse"));ReactDOM.render("",document.getElementById("content"));pid="Select Program"; ptitle="Select Program";this.setState({cselect: ""}); ctitle="Select Course"; cid=ctitle; loading = false; }}>Back</button>
       </div>
       <div class="col-sm">
-      <button type="button" class="btn stat-button" onClick={() => {this.charts()}}>Enter</button>
+      <button type="button" style={{color:"whitesmoke"}} class="btn stat-button" onClick={() => {this.charts()}}>Enter</button>
       </div>
     </div>
         </div>

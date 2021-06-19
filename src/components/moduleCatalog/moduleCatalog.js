@@ -37,7 +37,7 @@ class moduleCatalog extends Component {
     // this.submitNow = this.submitNow.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     var token = localStorage.getItem("token");
     moduleData.courseInstanceId = this.props.match.params.courseInstanceId;
     moduleData.courseId = this.props.match.params.courseId;

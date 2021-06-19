@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+import {Link,withRouter} from "react-router-dom";
 import dompurify from "dompurify";
 import "./Quiz.css";
 
@@ -208,7 +209,7 @@ class Quiz extends Component {
           />
             <div className="card-body position-relative" id={"Q"+qind.toString()}>
               {options}
-            <button className="btn-primary btn list-button custom-btn position-absolute bottom-0 end-0" id={`Btn${qind}`} type="button" onClick={() => {this.submission(qind.toString())}}>Submit</button>
+            <button className="btn list-button custom-btn position-absolute bottom-0 end-0" id={`Btn${qind}`} type="button" onClick={() => {this.submission(qind.toString())}}>Submit</button>
             </div>
             <div className="card-footer bg-transparent" id={"Sub"+qind.toString()}></div>
             </div>);
@@ -379,4 +380,4 @@ class Quiz extends Component {
   }
 }
 
-export default Quiz;
+export default withRouter(Quiz);
